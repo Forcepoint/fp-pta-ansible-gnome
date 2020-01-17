@@ -1,0 +1,54 @@
+---
+# tasks file for gnome
+
+# Install the GNOME Desktop environment.
+# https://unix.stackexchange.com/questions/181503/how-to-install-desktop-environments-on-centos-7
+- name: install GNOME
+  become: yes
+  yum:
+    name: '@^gnome-desktop-environment'
+    state: latest
+  register: yum_gnome
+
+# The gnome desktop installs java 8. This is not desired in our environment. Switch it to 11.
+- name: install java11
+  become: yes
+  yum:
+    name: java-11-openjdk-devel
+    state: latest
+
+- name: switch to java 11
+  become: yes
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: /usr/lib/jvm/jre-11-openjdk/bin/java
+
+# Installing the GNOME desktop prompts for a EULA agreement acceptance, which causes the auto login to not run from the
+# jenkins-node-jnlp role. This disables that EULA prompt. https://bugs.centos.org/view.php?id=7177
+- name: disable initial-setup-graphical.service
+  become: yes
+  service:
+    name: initial-setup-graphical.service
+    state: stopped
+    enabled: no
+
+- name: get default runlevel
+  command: systemctl get-default
+  register: runlevel
+
+- name: Set graphical runlevel
+  become: yes
+  command: systemctl set-default graphical.target
+  when: runlevel.stdout != "graphical.target"
+
+- name: is graphical currently active
+  command: systemctl is-active graphical.target
+  ignore_errors: yes
+  register: graphical
+
+# This restart is a tricky thing. There's a license agreement which won't appear unless you start the GUI.
+# I figure a restart is the cleanest way to do that. If this becomes a problem, find a way to accept
+# the license agreement programatically, then you can just start the GUI without a restart.
+- include_tasks: restart.yml
+  when: yum_gnome.changed or graphical.stdout != "active"
