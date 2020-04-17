@@ -9,7 +9,8 @@ within a user logged in to the OS via the GUI. If you use the jenkins-node-jnlp 
 
 ## Requirements
 
-None
+As of this writing (2020-01-29), this role does not apply with the docker-host role as
+you'll get a conflict with urllib3 being applied by pip and by yum.
 
 ## Role Variables
 
@@ -27,7 +28,7 @@ None
 
 ## License
 
-BSD
+BSD-3-Clause
 
 ## Author Information
 
