@@ -10,20 +10,6 @@
     state: latest
   register: yum_gnome
 
-# The gnome desktop installs java 8. This is not desired in our environment. Switch it to 11.
-- name: install java11
-  become: yes
-  yum:
-    name: java-11-openjdk-devel
-    state: latest
-
-- name: switch to java 11
-  become: yes
-  alternatives:
-    name: java
-    link: /usr/bin/java
-    path: /usr/lib/jvm/jre-11-openjdk/bin/java
-
 # Installing the GNOME desktop prompts for a EULA agreement acceptance, which causes the auto login to not run from the
 # jenkins-node-jnlp role. This disables that EULA prompt. https://bugs.centos.org/view.php?id=7177
 - name: disable initial-setup-graphical.service
