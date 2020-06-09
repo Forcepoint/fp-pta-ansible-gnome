@@ -7,6 +7,8 @@ any connections made via SSH come from the Jenkins master over SSH which won't
 get an environment which has access to the GUI. The only viable solution is to use a Jenkins JNLP agent started from 
 within a user logged in to the OS via the GUI. If you use the jenkins-node-jnlp role, you'll get just that.
 
+For information about PTA and how to use it with this Ansible role please visit https://github.com/Forcepoint/fp-pta-overview/blob/master/README.md
+
 ## Requirements
 
 As of this writing (2020-01-29), this role does not apply with the docker-host role as
