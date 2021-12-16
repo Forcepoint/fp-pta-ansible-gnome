@@ -47,5 +47,6 @@
 # This restart is a tricky thing. There's a license agreement which won't appear unless you start the GUI.
 # I figure a restart is the cleanest way to do that. If this becomes a problem, find a way to accept
 # the license agreement programatically, then you can just start the GUI without a restart.
-- include_tasks: restart.yml
+- name: restart the OS
+  ansible.buitin.reboot:
   when: gnome_yum_install.changed or gnome_graphical_active.stdout != "active"
