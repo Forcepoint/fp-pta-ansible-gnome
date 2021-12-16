@@ -48,5 +48,5 @@
 # I figure a restart is the cleanest way to do that. If this becomes a problem, find a way to accept
 # the license agreement programatically, then you can just start the GUI without a restart.
 - name: restart the OS
-  ansible.buitin.reboot:
+  ansible.builtin.reboot:
   when: gnome_yum_install.changed or gnome_graphical_active.stdout != "active"
