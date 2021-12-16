@@ -28,6 +28,7 @@
     name: initial-setup-graphical.service
     state: stopped
     enabled: no
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version <= '7'
 
 - name: get default runlevel
   ansible.builtin.command: systemctl get-default
