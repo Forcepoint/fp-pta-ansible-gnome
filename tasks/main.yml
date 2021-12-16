@@ -3,18 +3,18 @@
 
 # Install the GNOME Desktop environment.
 # https://unix.stackexchange.com/questions/181503/how-to-install-desktop-environments-on-centos-7
-- name: install GNOME old
+- name: install GNOME <=7
   become: yes
-  ansible.buitin.yum:
+  ansible.builtin.yum:
     name: '@^gnome-desktop-environment'
     state: latest
   register: gnome_yum_install
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version <= '7'
 
 # https://www.itzgeek.com/how-tos/linux/centos-how-tos/how-to-install-gnome-gui-on-rhel-8.html
-- name: install GNOME new
+- name: install GNOME 8+
   become: yes
-  ansible.buitin.yum:
+  ansible.builtin.yum:
     name: '@^Server with GUI'
     state: latest
   register: gnome_yum_install
@@ -24,22 +24,22 @@
 # jenkins-node-jnlp role. This disables that EULA prompt. https://bugs.centos.org/view.php?id=7177
 - name: disable initial-setup-graphical.service
   become: yes
-  ansible.buitin.service:
+  ansible.builtin.service:
     name: initial-setup-graphical.service
     state: stopped
     enabled: no
 
 - name: get default runlevel
-  ansible.buitin.command: systemctl get-default
+  ansible.builtin.command: systemctl get-default
   register: gnome_runlevel
 
 - name: Set graphical runlevel
   become: yes
-  ansible.buitin.command: systemctl set-default graphical.target
+  ansible.builtin.command: systemctl set-default graphical.target
   when: gnome_runlevel.stdout != "graphical.target"
 
 - name: is graphical currently active
-  ansible.buitin.command: systemctl is-active graphical.target
+  ansible.builtin.command: systemctl is-active graphical.target
   ignore_errors: yes
   register: gnome_graphical_active
 
