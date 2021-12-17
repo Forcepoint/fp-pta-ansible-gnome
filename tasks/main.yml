@@ -15,7 +15,7 @@
 - name: install GNOME 8+
   become: yes
   ansible.builtin.yum:
-    name: '@Server with GUI'
+    name: '@GNOME'
     state: latest
   register: gnome_yum_install
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '7'
